@@ -1,6 +1,6 @@
 {
   "name": "@targetpackage/cytoscape-supportimages",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "description": "A plugin that enables support images on the graph.",
   "main": "cytoscape-supportimages.js",
   "scripts": {

@@ -28,7 +28,7 @@ gulp.task("confver", ["version"], function () {
 });
 
 gulp.task("version", function (next) {
-  var now = new Date();
+  const now = new Date();
   version = process.env["VERSION"];
 
   if (version) {
