@@ -7,16 +7,7 @@
     "type": "git",
     "url": "https://github.com/cytoscape.js-supportimages.git"
   },
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
-  "keywords": [
-    "cytoscape",
-    "cyext"
-  ],
+  "ignore": ["**/.*", "node_modules", "bower_components", "test", "tests"],
+  "keywords": ["cytoscape", "cyext"],
   "license": "MIT"
 }

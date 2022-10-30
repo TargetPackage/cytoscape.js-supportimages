@@ -1,225 +1,227 @@
-<!DOCTYPE>
+<!DOCTYPE >
 
 <html>
+  <head>
+    <title>cytoscape-supportimages.js demo</title>
 
-	<head>
-		<title>cytoscape-supportimages.js demo</title>
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1"
+    />
 
-		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <!--<script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.16.1/cytoscape.js"></script>
 
-		<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-		<!--<script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.js"></script>-->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.16.1/cytoscape.js"></script>
+    <!-- for testing with local version of cytoscape.js -->
+    <!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
 
-		<!-- for testing with local version of cytoscape.js -->
-		<!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
+    <script src="cytoscape-supportimages.js"></script>
 
-		<script src="cytoscape-supportimages.js"></script>
+    <style>
+      body {
+        font-family: helvetica;
+        font-size: 14px;
+      }
 
-		<style>
-			body {
-				font-family: helvetica;
-				font-size: 14px;
-			}
+      #cy {
+        width: 80%;
+        height: 100%;
+        position: absolute;
+        left: 20%;
+        top: 0;
+        z-index: 999;
+      }
 
-			#cy {
-				width: 80%;
-				height: 100%;
-				position: absolute;
-				left: 20%;
-				top: 0;
-				z-index: 999;
-			}
+      h1 {
+        opacity: 0.5;
+        font-size: 1em;
+      }
 
-			h1 {
-				opacity: 0.5;
-				font-size: 1em;
-			}
+      #controls {
+        width: 20%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 999;
+        background-color: lightgray;
+        border-right: 1px solid black;
+      }
+    </style>
 
-			#controls {
-				width: 20%;
-				height: 100%;
-				position: absolute;
-				left: 0;
-				top: 0;
-				z-index: 999;
-				background-color: lightgray;
-				border-right: 1px solid black;
-			}
-		</style>
+    <script>
+      function removeImg(id) {
+        var si = cy.supportimages();
+        var img = si.image(id);
+        si.removeSupportImage(img);
+        refreshImages();
+      }
 
-		<script>
-			function removeImg(id) {
-				var si = cy.supportimages();
-				var img = si.image(id);
-				si.removeSupportImage(img);
-				refreshImages();
-			}
-			function moveUp(id) {
-				var si = cy.supportimages();
-				var img = si.image(id);
-				si.moveImageUp(img);
-				refreshImages();
-			}
+      function moveUp(id) {
+        var si = cy.supportimages();
+        var img = si.image(id);
+        si.moveImageUp(img);
+        refreshImages();
+      }
 
-			function moveDown(id) {
-				var si = cy.supportimages();
-				var img = si.image(id);
-				si.moveImageDown(img);
-				refreshImages();
-			}
+      function moveDown(id) {
+        var si = cy.supportimages();
+        var img = si.image(id);
+        si.moveImageDown(img);
+        refreshImages();
+      }
 
-			function changeLock(id) {
-				var si = cy.supportimages();
-				var img = si.image(id);
-				si.setImageLocked(img, !img.locked);
-				refreshImages();
-			}
+      function changeLock(id) {
+        var si = cy.supportimages();
+        var img = si.image(id);
+        si.setImageLocked(img, !img.locked);
+        refreshImages();
+      }
 
-			function changeVisibility(id) {
-				var si = cy.supportimages();
-				var img = si.image(id);
-				si.setImageVisible(img, !img.visible);
-				refreshImages();
-			}
+      function changeVisibility(id) {
+        var si = cy.supportimages();
+        var img = si.image(id);
+        si.setImageVisible(img, !img.visible);
+        refreshImages();
+      }
 
-            function select(id) {
-                var si = cy.supportimages();
-                var img = si.image(id);
-                si.selectImage(img);
-            }
+      function select(id) {
+        var si = cy.supportimages();
+        var img = si.image(id);
+        si.selectImage(img);
+      }
 
-			function refreshImages() {
-				var si = cy.supportimages();
-				var imgs = si.images();
-				var html = "<ul>";
-				for (var i = 0; i < imgs.length; i++) {
-					var img = imgs[i];
-					html += "<li>";
-					html += img.name;
-					html += "(" + img.url + ")";
-					html += "<button onclick='changeLock(\""+img.id+"\")'>";
-					html += img.locked ? "Unlock" : "Lock";
-					html += "</button>";
-					html += "<button onclick='changeVisibility(\""+img.id+"\")'>";
-					html += img.visible ? "Hide" : "Show";
-					html += "</button>";
-                    html += "<button onclick='select(\""+img.id+"\")'>Select</button>";
+      function refreshImages() {
+        var si = cy.supportimages();
+        var imgs = si.images();
+        var html = "<ul>";
+        for (var i = 0; i < imgs.length; i++) {
+          var img = imgs[i];
+          html += "<li>";
+          html += img.name;
+          html += "(" + img.url + ")";
+          html += "<button onclick='changeLock(\"" + img.id + "\")'>";
+          html += img.locked ? "Unlock" : "Lock";
+          html += "</button>";
+          html += "<button onclick='changeVisibility(\"" + img.id + "\")'>";
+          html += img.visible ? "Hide" : "Show";
+          html += "</button>";
+          html +=
+            "<button onclick='select(\"" + img.id + "\")'>Select</button>";
 
-					if (i > 0) {
-						html += "<button onclick='moveUp(\""+img.id+"\")'>Move Up</button>";
-					}
+          if (i > 0) {
+            html +=
+              "<button onclick='moveUp(\"" + img.id + "\")'>Move Up</button>";
+          }
 
-					if (i + 1 < imgs.length) {
-						html += "<button onclick='moveDown(\""+img.id+"\")'>Move Down</button>";
-					}
+          if (i + 1 < imgs.length) {
+            html +=
+              "<button onclick='moveDown(\"" +
+              img.id +
+              "\")'>Move Down</button>";
+          }
 
-					html += "<button onclick='removeImg(\""+img.id+"\")'>Remove</button>";
+          html +=
+            "<button onclick='removeImg(\"" + img.id + "\")'>Remove</button>";
 
-					html += "</li>";
-				}
-				html += "</ul>";
+          html += "</li>";
+        }
+        html += "</ul>";
 
-				$('#images').html(html);
-			}
+        $("#images").html(html);
+      }
 
-			function addImage() {
-				var name = $('#name').val();
-				var url = $('#url').val();
-				if (url && name) {
-					var si = cy.supportimages();
-					si.addSupportImage({
-						name: name,
-						url:url
-					});
-					refreshImages();
-				} else {
-					alert('Url and name are required');
-				}
-			}
-		</script>
+      function addImage() {
+        var name = $("#name").val();
+        var url = $("#url").val();
+        if (url && name) {
+          var si = cy.supportimages();
+          si.addSupportImage({
+            name: name,
+            url: url,
+          });
+          refreshImages();
+        } else {
+          alert("Url and name are required");
+        }
+      }
+    </script>
 
-		<script>
-			$(function(){
+    <script>
+      $(function () {
+        var cy = (window.cy = cytoscape({
+          container: document.getElementById("cy"),
 
-				var cy = window.cy = cytoscape({
-					container: document.getElementById('cy'),
+          ready: function () {},
 
-					ready: function(){
-					},
+          style: [
+            {
+              selector: "node",
+              css: {
+                content: "data(name)",
+              },
+            },
 
-					style: [
-						{
-							selector: 'node',
-							css: {
-								'content': 'data(name)'
-							}
-						},
+            {
+              selector: "edge",
+              css: {
+                "target-arrow-shape": "triangle",
+              },
+            },
+          ],
 
-						{
-							selector: 'edge',
-							css: {
-								'target-arrow-shape': 'triangle'
-							}
-						}
-					],
+          elements: {
+            nodes: [
+              { data: { id: "j", name: "Jerry" } },
+              { data: { id: "e", name: "Elaine" } },
+              { data: { id: "k", name: "Kramer" } },
+              { data: { id: "g", name: "George" } },
+            ],
+            edges: [
+              { data: { source: "j", target: "e" } },
+              { data: { source: "j", target: "k" } },
+              { data: { source: "j", target: "g" } },
+              { data: { source: "e", target: "j" } },
+              { data: { source: "e", target: "k" } },
+              { data: { source: "k", target: "j" } },
+              { data: { source: "k", target: "e" } },
+              { data: { source: "k", target: "g" } },
+              { data: { source: "g", target: "j" } },
+            ],
+          },
+        }));
 
-					elements: {
-						nodes: [
-							{ data: { id: 'j', name: 'Jerry' } },
-							{ data: { id: 'e', name: 'Elaine' } },
-							{ data: { id: 'k', name: 'Kramer' } },
-							{ data: { id: 'g', name: 'George' } }
-						],
-						edges: [
-							{ data: { source: 'j', target: 'e' } },
-							{ data: { source: 'j', target: 'k' } },
-							{ data: { source: 'j', target: 'g' } },
-							{ data: { source: 'e', target: 'j' } },
-							{ data: { source: 'e', target: 'k' } },
-							{ data: { source: 'k', target: 'j' } },
-							{ data: { source: 'k', target: 'e' } },
-							{ data: { source: 'k', target: 'g' } },
-							{ data: { source: 'g', target: 'j' } }
-						]
-					},
-				});
+        // init the plugin
+        cy.supportimages();
+        cy.on("cysupportimages.*", function (evt) {
+          var html = $("#events").html();
+          html = "<p>" + evt.type + evt.namespace + "</p>" + html;
+          $("#events").html(html);
+        });
 
-				// init the plugin
-				cy.supportimages();
-                cy.on('cysupportimages.*', function (evt) {
-                    var html = $('#events').html();
-                    html = '<p>' + evt.type + evt.namespace + '</p>' + html;
-                    $('#events').html(html);
-                });
+        cy.supportimages().addSupportImage({
+          name: "cytoscape",
+          url: "http://www.cytoscape.org/images/logo/cy3logoOrange.svg",
+        });
+        refreshImages();
+      });
+    </script>
+  </head>
 
-				cy.supportimages().addSupportImage({
-					name: 'cytoscape',
-					url: 'http://www.cytoscape.org/images/logo/cy3logoOrange.svg'
-				});
-				refreshImages();
+  <body>
+    <h1>cytoscape-supportimages demo</h1>
 
-			});
-		</script>
-	</head>
-
-	<body>
-		<h1>cytoscape-supportimages demo</h1>
-
-		<div id="cy"></div>
-		<div id="controls">
-			<div style="padding:10px">
-				Name: <input id="name"></input><br/>
-				&nbsp;&nbsp;URL: <input id="url"></input><br/>
-				<button onclick="addImage()">Add</button>
-			</div>
-			<div id="images">
-			</div>
-            Eventos:
-            <div id="events">
-            </div>
-		</div>
-
-	</body>
-
+    <div id="cy"></div>
+    <div id="controls">
+      <div style="padding: 10px">
+        Name: <input id="name" /><br />
+        &nbsp;&nbsp;URL: <input id="url" /><br />
+        <button onclick="addImage()">Add</button>
+      </div>
+      <div id="images"></div>
+      Eventos:
+      <div id="events"></div>
+    </div>
+  </body>
 </html>
