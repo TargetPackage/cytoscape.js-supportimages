@@ -8,23 +8,11 @@ const runSequence = require("run-sequence");
 const prompt = require("gulp-prompt");
 var version;
 
-gulp.task("default", [], function (next) {
+gulp.task("default", function (next) {
   console.log(
     "You must explicitly call `gulp publish` to publish the extension"
   );
   next();
-});
-
-gulp.task("publish", [], function (next) {
-  runSequence("confver", "lint", "pkgver", "push", "tag", "npm", next);
-});
-
-gulp.task("confver", ["version"], function () {
-  return gulp.src(".").pipe(
-    prompt.confirm({
-      message: `Are you sure version '${version}' is OK to publish?`,
-    })
-  );
 });
 
 gulp.task("version", function (next) {
@@ -48,7 +36,15 @@ gulp.task("version", function (next) {
   }
 });
 
-gulp.task("pkgver", ["version"], function () {
+gulp.task("confver", gulp.series("version"), function () {
+  return gulp.src(".").pipe(
+    prompt.confirm({
+      message: `Are you sure version '${version}' is OK to publish?`,
+    })
+  );
+});
+
+gulp.task("pkgver", gulp.series("version"), function () {
   return gulp
     .src(["package.json", "bower.json"])
     .pipe(replace(/\"version\"\:\s*\".*?\"/, `"version": "${version}"`))
@@ -93,4 +89,8 @@ gulp.task("lint", function () {
     )
     .pipe(jshint.reporter(jshStylish))
     .pipe(jshint.reporter("fail"));
+});
+
+gulp.task("publish", function (next) {
+  runSequence("confver", "lint", "pkgver", "push", "tag", "npm", next);
 });

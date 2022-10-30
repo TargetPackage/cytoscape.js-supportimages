@@ -5,7 +5,8 @@
   "main": "cytoscape-supportimages.js",
   "scripts": {
     "lint": "prettier --plugin-search-dir . --check . && eslint .",
-    "format": "prettier --plugin-search-dir . --write ."
+    "format": "prettier --plugin-search-dir . --write .",
+    "publish": "gulp publish"
   },
   "repository": {
     "type": "git",
