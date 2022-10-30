@@ -24,22 +24,27 @@
       }
 
       #cy {
-        width: 80%;
+        width: calc(100% - 250px);
         height: 100%;
         position: absolute;
-        left: 20%;
+        left: 250px;
         top: 0;
-        z-index: 999;
+        z-index: 2;
       }
 
       h1 {
-        opacity: 0.5;
+        color: gray;
         font-size: 1em;
+        z-index: 3;
+      }
+
+      h2 {
+        font-size: 1.5em;
+        padding-left: 10px;
       }
 
       #controls {
-        width: 20%;
-        min-width: 200px;
+        width: 250px;
         height: calc(100% - 2.5em);
         position: absolute;
         left: 0;
@@ -48,6 +53,10 @@
         background-color: lightgray;
         border-right: 1px solid black;
         border-top: 1px solid black;
+      }
+
+      #events {
+        padding-left: 15px;
       }
     </style>
 
@@ -101,31 +110,25 @@
           const img = imgs[i];
           html += "<li>";
           html += img.name;
-          html += "(" + img.url + ")";
-          html += "<button onclick='changeLock(\"" + img.id + "\")'>";
+          // html += `(${img.url})`;
+          html += "<br>";
+          html += `<button onclick='changeLock("${img.id}")'>`;
           html += img.locked ? "Unlock" : "Lock";
           html += "</button>";
-          html += "<button onclick='changeVisibility(\"" + img.id + "\")'>";
+          html += `<button onclick='changeVisibility("${img.id}")'>`;
           html += img.visible ? "Hide" : "Show";
           html += "</button>";
-          html +=
-            "<button onclick='select(\"" + img.id + "\")'>Select</button>";
+          html += `<button onclick='select("${img.id}")'>Select</button>`;
 
           if (i > 0) {
-            html +=
-              "<button onclick='moveUp(\"" + img.id + "\")'>Move Up</button>";
+            html += `<button onclick='moveUp("${img.id}")'>Move Up</button>`;
           }
 
           if (i + 1 < imgs.length) {
-            html +=
-              "<button onclick='moveDown(\"" +
-              img.id +
-              "\")'>Move Down</button>";
+            html += `<button onclick='moveDown("${img.id}")'>Move Down</button>`;
           }
 
-          html +=
-            "<button onclick='removeImg(\"" + img.id + "\")'>Remove</button>";
-
+          html += `<button onclick='removeImg("${img.id}")'>Remove</button>`;
           html += "</li>";
         }
         html += "</ul>";
@@ -193,14 +196,15 @@
         // init the plugin
         cy.supportimages();
         cy.on("cysupportimages.*", function (evt) {
+          // For the full event, use 'evt.type + evt.namespace'
           let html = $("#events").html();
-          html = "<p>" + evt.type + evt.namespace + "</p>" + html;
+          html = "<p>" + evt.namespace.substring(1) + "</p>" + html;
           $("#events").html(html);
         });
 
         cy.supportimages().addSupportImage({
-          name: "cytoscape",
-          url: "http://www.cytoscape.org/images/logo/cy3logoOrange.svg",
+          name: "Aaron Meese",
+          url: "https://avatars.githubusercontent.com/u/17814535?v=4",
         });
         refreshImages();
       });
@@ -214,11 +218,11 @@
     <div id="controls">
       <div style="padding: 10px">
         Name: <input id="name" /><br />
-        &nbsp;&nbsp;URL: <input id="url" /><br />
+        URL: <input id="url" /><br />
         <button onclick="addImage()">Add</button>
       </div>
       <div id="images"></div>
-      Events:
+      <h2>Events:</h2>
       <div id="events"></div>
     </div>
   </body>
