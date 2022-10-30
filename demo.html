@@ -10,7 +10,7 @@
     />
 
     <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-    <script src="https://raw.githubusercontent.com/cytoscape/cytoscape.js/unstable/dist/cytoscape.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.23.0/cytoscape.min.js"></script>
 
     <!-- for testing with local version of cytoscape.js -->
     <!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
@@ -39,13 +39,15 @@
 
       #controls {
         width: 20%;
-        height: 100%;
+        min-width: 200px;
+        height: calc(100% - 2.5em);
         position: absolute;
         left: 0;
-        top: 0;
+        bottom: 0;
         z-index: 999;
         background-color: lightgray;
         border-right: 1px solid black;
+        border-top: 1px solid black;
       }
     </style>
 
@@ -142,7 +144,7 @@
           });
           refreshImages();
         } else {
-          alert("Url and name are required");
+          alert("URL and name are required!");
         }
       }
     </script>
@@ -216,7 +218,7 @@
         <button onclick="addImage()">Add</button>
       </div>
       <div id="images"></div>
-      Eventos:
+      Events:
       <div id="events"></div>
     </div>
   </body>

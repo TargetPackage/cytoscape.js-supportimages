@@ -6,7 +6,7 @@
 (function () {
   "use strict";
 
-  var debounce = (function () {
+  const debounce = (function () {
     /**
      * lodash 3.1.1 (Custom Build) <https://lodash.com/>
      * Build: `lodash modern modularize exports="npm" -o ./`
@@ -16,11 +16,10 @@
      * Available under MIT license <https://lodash.com/license>
      */
     /** Used as the `TypeError` message for "Functions" methods. */
-    var FUNC_ERROR_TEXT = "Expected a function";
+    const FUNC_ERROR_TEXT = "Expected a function";
 
     /* Native method references for those with the same name as other `lodash` methods. */
-    var nativeMax = Math.max,
-      nativeNow = Date.now;
+    const nativeMax = Math.max, nativeNow = Date.now;
 
     /**
      * Gets the number of milliseconds that have elapsed since the Unix epoch
@@ -36,7 +35,7 @@
      * }, _.now());
      * // => logs the number of milliseconds it took for the deferred function to be invoked
      */
-    var now =
+    const now =
       nativeNow ||
       function () {
         return new Date().getTime();
@@ -344,7 +343,7 @@
       return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
         /[xy]/g,
         function (c) {
-          var r = (Math.random() * 16) | 0,
+          const r = (Math.random() * 16) | 0,
             v = c === "x" ? r : (r & 0x3) | 0x8;
           return v.toString(16);
         }
@@ -533,12 +532,12 @@
     clientX,
     clientY
   ) {
-    var offsets = this.findContainerClientCoords();
-    var offsetLeft = offsets[0];
-    var offsetTop = offsets[1];
+    const offsets = this.findContainerClientCoords();
+    const offsetLeft = offsets[0];
+    const offsetTop = offsets[1];
 
-    var x = clientX - offsetLeft;
-    var y = clientY - offsetTop;
+    let x = clientX - offsetLeft;
+    let y = clientY - offsetTop;
 
     x -= this.data.cy.pan().x;
     y -= this.data.cy.pan().y;
@@ -585,28 +584,26 @@
 
   // Resize canvas
   SupportImageCanvasRenderer.prototype.matchCanvasSize = function (container) {
-    var data = this.data;
-    var width = container.clientWidth;
-    var height = container.clientHeight;
-    var pixelRatio = this.getPixelRatio();
-    var canvasWidth = width * pixelRatio;
-    var canvasHeight = height * pixelRatio;
+    const data = this.data;
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    const pixelRatio = this.getPixelRatio();
+    const canvasWidth = width * pixelRatio;
+    const canvasHeight = height * pixelRatio;
 
     if (
       canvasWidth === this.canvasWidth &&
       canvasHeight === this.canvasHeight
     ) {
+      // Save cycles if nothing changed
       return;
-      // save cycles if same
     }
 
-    // resizing resets the style
-
-    var canvasContainer = data.canvasContainer;
+    // Resizing resets the style
+    const canvasContainer = data.canvasContainer;
     canvasContainer.style.width = width + "px";
     canvasContainer.style.height = height + "px";
-
-    var canvas = data.canvas;
+    const canvas = data.canvas;
 
     if (canvas.width !== canvasWidth || canvas.height !== canvasHeight) {
       canvas.width = canvasWidth;
@@ -671,9 +668,9 @@
     const supportImageExt = r.data.supportImageExt;
 
     const zoom = cy.zoom();
-    const effectiveZoom = forcedZoom !== undefined ? forcedZoom : zoom;
+    let effectiveZoom = forcedZoom !== undefined ? forcedZoom : zoom;
     const pan = cy.pan();
-    const effectivePan = {
+    let effectivePan = {
       x: pan.x,
       y: pan.y,
     };
@@ -682,8 +679,7 @@
       effectivePan = forcedPan;
     }
 
-    // apply pixel ratio
-
+    // Apply pixel ratio
     effectiveZoom *= pixelRatio;
     effectivePan.x *= pixelRatio;
     effectivePan.y *= pixelRatio;
@@ -740,7 +736,7 @@
   ) {
     const r = this;
 
-    // get image, and if not loaded then ask to redraw when later loaded
+    // Get image, and if not loaded then ask to redraw when later loaded
     const img = this.getCachedImage(supportImage, function (evt) {
       const resource = evt.currentTarget;
       const w = resource.width;
@@ -815,8 +811,8 @@
   };
 
   // Extension core
-  var SupportImageExtension = (function () {
-    // helper function
+  const SupportImageExtension = (function () {
+    // Helper function
     function bindEvent(supportImageExt, eventName, handler) {
       const cy = supportImageExt._private.cy;
 
@@ -824,7 +820,7 @@
         if (evt.isPropagationStopped && evt.isPropagationStopped()) return;
 
         evt.supportImageExt = supportImageExt;
-        var target = evt.cyTarget ? evt.cyTarget : evt.target;
+        const target = evt.cyTarget ? evt.cyTarget : evt.target;
         if (target !== evt.cy) {
           // is not the core
           return handler(evt);
@@ -835,9 +831,8 @@
         const pos = evt.cyPosition ? evt.cyPosition : evt.position;
 
         if (supportImageExt.selectedImage()) {
-          let idx, len;
-          for (idx = 0, len = resizeControls.length; idx < len; ++idx) {
-            var control = resizeControls[idx];
+          for (let idx = 0, len = resizeControls.length; idx < len; ++idx) {
+            const control = resizeControls[idx];
             if (control.containsPoint(pos.x, pos.y)) {
               return handler(evt, control);
             }
@@ -921,6 +916,7 @@
           ? evt.cyRenderedPosition
           : evt.renderedPosition;
       }
+
       const evtState = supportImageExt._private.evtState;
 
       function saveCytoscapeState(cy) {
@@ -932,6 +928,7 @@
           panningEnabled: cy.panningEnabled(),
           selectedElements: cy.elements(":selected"),
         };
+
         evtState.cyState = cyState;
       }
 
@@ -989,7 +986,7 @@
             evt.supportImageExt.selectImage(item);
             item.dragging(true);
           } else if (item instanceof Rectangle) {
-            //resize control
+            // Resize control
             evtState.image = null;
             changePointerResizeControl(item.id);
             evtState.resizeControl = item;
@@ -1048,7 +1045,7 @@
       });
 
       bindEvent(supportImageExt, "mousemove", function (evt, item) {
-        // Se não for evento de resize é somente mouseover
+        // If not for resize event, it is only mouseover
         if (!evtState.resizeControl) {
           if (item instanceof Rectangle) {
             // Mouseover
@@ -1125,8 +1122,7 @@
           switch (control.id) {
             case "tl":
               if (keepAspectRatio) {
-                const d =
-                  dx > 0 ? Math.max(dx, dy) : dx < 0 ? Math.min(dx, dy) : dy;
+                const d = dx > 0 ? Math.max(dx, dy) : dx < 0 ? Math.min(dx, dy) : dy;
                 const fx = d === dx ? 1 : factorX;
                 const fy = d === dy ? 1 : factorY;
 
@@ -1154,8 +1150,7 @@
                   bounds.height > minimumImageSize
                     ? newBoundY
                     : limits.center.y;
-                bounds.x =
-                  bounds.width > minimumImageSize ? newBoundX : limits.center.x;
+                bounds.x = bounds.width > minimumImageSize ? newBoundX : limits.center.x;
               }
 
               break;
@@ -1163,7 +1158,7 @@
             case "tm":
               bounds.height -= keepAxis ? dy * 2 : dy;
 
-              var newBoundY = bounds.y + dy;
+              newBoundY = bounds.y + dy;
               if (bounds.height < minimumImageSize) {
                 newBoundY = keepAxis
                   ? limits.center.y
@@ -1175,7 +1170,7 @@
                 dy = keepAxis ? dy * 2 : dy;
                 bounds.width -= dy * factorX;
 
-                let newBoundX = bounds.x + dy * factorX * 0.5;
+                newBoundX = bounds.x + dy * factorX * 0.5;
                 if (
                   bounds.width < minimumImageSize &&
                   bounds.height < minimumImageSize
@@ -1189,8 +1184,7 @@
 
             case "tr":
               if (keepAspectRatio) {
-                const d =
-                  dx > 0 ? Math.max(dx, dy) : dx < 0 ? Math.min(dx, dy) : dy;
+                const d = dx > 0 ? Math.max(dx, dy) : dx < 0 ? Math.min(dx, dy) : dy;
                 const fx = d === dx ? 1 : -factorX;
                 const fy = d === dy ? 1 : -factorY;
 
@@ -1201,8 +1195,8 @@
               bounds.width += keepAspectRatio && keepAxis ? dx * 2 : dx;
               bounds.height -= keepAxis ? dy * 2 : dy;
 
-              var newBoundX = bounds.x - (keepAspectRatio ? dx : dx * 0.5);
-              var newBoundY = bounds.y + dy;
+              newBoundX = bounds.x - (keepAspectRatio ? dx : dx * 0.5);
+              newBoundY = bounds.y + dy;
 
               if (!keepAxis) {
                 if (newBoundY + boundPadding > limits.bottomLeft.y) {
@@ -1222,10 +1216,9 @@
 
             case "bl":
               if (keepAspectRatio) {
-                var d =
-                  dx > 0 ? Math.max(dx, dy) : dx < 0 ? Math.min(dx, dy) : dy;
-                var fx = d === dx ? 1 : -factorX;
-                var fy = d === dy ? 1 : -factorY;
+                const d = dx > 0 ? Math.max(dx, dy) : dx < 0 ? Math.min(dx, dy) : dy;
+                const fx = d === dx ? 1 : -factorX;
+                const fy = d === dy ? 1 : -factorY;
 
                 dx = d * fx;
                 dy = d * fy;
@@ -1234,14 +1227,14 @@
               bounds.width -= keepAxis ? dx * 2 : dx;
               bounds.height += keepAspectRatio && keepAxis ? dy * 2 : dy;
 
-              var newBoundX = bounds.x + dx;
+              newBoundX = bounds.x + dx;
               if (!keepAxis) {
                 if (newBoundX + boundPadding > limits.topRight.x) {
                   newBoundX = limits.topRight.x - boundPadding;
                 }
                 bounds.x = bounds.x = newBoundX;
               } else {
-                var newBoundY = bounds.y - (keepAspectRatio ? dy : dy * 0.5);
+                newBoundY = bounds.y - (keepAspectRatio ? dy : dy * 0.5);
                 bounds.y =
                   bounds.height > minimumImageSize
                     ? newBoundY
@@ -1256,7 +1249,7 @@
               bounds.height += dy;
 
               if (keepAxis) {
-                var newBoundY = bounds.y - dy;
+                newBoundY = bounds.y - dy;
                 bounds.height += dy;
                 if (bounds.height < minimumImageSize) {
                   newBoundY = limits.center.y;
@@ -1267,7 +1260,7 @@
               if (keepAspectRatio) {
                 dy = keepAxis ? dy * 2 : dy;
 
-                var newBoundX = bounds.x - dy * factorX * 0.5;
+                newBoundX = bounds.x - dy * factorX * 0.5;
                 if (newBoundX > limits.topMiddle.x) {
                   newBoundX = limits.topMiddle.x;
                 }
@@ -1280,10 +1273,10 @@
 
             case "br":
               if (keepAspectRatio) {
-                var d =
+                const d =
                   dx > 0 ? Math.max(dx, dy) : dx < 0 ? Math.min(dx, dy) : dy;
-                var fx = d === dx ? 1 : factorX;
-                var fy = d === dy ? 1 : factorY;
+                const fx = d === dx ? 1 : factorX;
+                const fy = d === dy ? 1 : factorY;
 
                 dx = d * fx;
                 dy = d * fy;
@@ -1291,8 +1284,8 @@
               bounds.width += dx;
               bounds.height += dy;
               if (keepAxis) {
-                var newBoundX = bounds.x - dx * 0.5;
-                var newBoundY = bounds.y - dy * 0.5;
+                newBoundX = bounds.x - dx * 0.5;
+                newBoundY = bounds.y - dy * 0.5;
                 bounds.y =
                   bounds.height > minimumImageSize
                     ? newBoundY
@@ -1303,7 +1296,7 @@
               break;
 
             case "ml":
-              var newBoundX = bounds.x + dx;
+              newBoundX = bounds.x + dx;
               if (
                 !keepAxis &&
                 newBoundX + boundPadding > limits.middleRight.x
@@ -1319,7 +1312,7 @@
               if (keepAspectRatio) {
                 dx = keepAxis ? dx * 2 : dx;
 
-                var newBoundY = bounds.y + dx * factorY * 0.5;
+                newBoundY = bounds.y + dx * factorY * 0.5;
                 if (!keepAxis && newBoundY > limits.middleRight.y) {
                   newBoundY = limits.middleRight.y;
                 } else if (keepAxis && newBoundY > limits.center.y) {
@@ -1334,7 +1327,7 @@
             case "mr":
               bounds.width += keepAxis ? dx * 2 : dx;
               if (keepAxis) {
-                var newBoundX = bounds.x - dx;
+                newBoundX = bounds.x - dx;
                 if (bounds.width < minimumImageSize) {
                   newBoundX = limits.center.x - boundPadding / 2;
                 }
@@ -1342,7 +1335,7 @@
               }
               if (keepAspectRatio) {
                 dx = keepAxis ? dx * 2 : dx;
-                var newBoundY = bounds.y - dx * factorY * 0.5;
+                newBoundY = bounds.y - dx * factorY * 0.5;
                 if (newBoundY > limits.middleLeft.y) {
                   newBoundY = limits.middleLeft.y;
                 }
@@ -1365,9 +1358,9 @@
       });
     }
 
-    // Alterando o css dessa maneira porque mouseover e mouseout não são disparados pelo cytoscape para elementos do tipo supportimage
-    // e como o canvas é único para a imagem e os controles, é preciso aplicar o css para todo o body e realizar o controle manualmente
-    // de adição e remoção dos mesmos
+    // Altering the CSS in this way because mouseover and mouseout are not triggered by cytoscape for elements of type `supportimage`
+    // as the canvas is unique for the image and the controls, it is necessary to apply the CSS for everything or the body and perform the manual control
+    // of addition and removal two same
     function changePointerResizeControl(control) {
       let cssCursor = "";
       switch (control) {
@@ -1396,6 +1389,7 @@
           cssCursor = "e-resize";
           break;
       }
+
       document.body.style.cursor = cssCursor;
     }
 
@@ -1405,15 +1399,12 @@
       const w = supportImage.bounds.width;
       const h = supportImage.bounds.height;
 
-      var resizeControls = supportImageExt.resizeControls();
-      var cw = 5 * (1 / supportImageExt._private.cy.zoom());
-      var ch = 5 * (1 / supportImageExt._private.cy.zoom());
-      if (cw < 5) {
-        cw = 5;
-      }
-      if (ch < 5) {
-        ch = 5;
-      }
+      let resizeControls = supportImageExt.resizeControls();
+      let cw = 5 * (1 / supportImageExt._private.cy.zoom());
+      let ch = 5 * (1 / supportImageExt._private.cy.zoom());
+      if (cw < 5) cw = 5;
+      if (ch < 5) ch = 5;
+
       // top-left
       resizeControls[0].set(x - cw / 2, y - ch / 2, cw, ch);
       // top-middle
@@ -1433,21 +1424,17 @@
     }
 
     function findLimits(supportImageExt, imageInfo) {
-      var x = imageInfo.x;
-      var y = imageInfo.y;
-      var h = imageInfo.h;
-      var w = imageInfo.w;
+      const x = imageInfo.x;
+      const y = imageInfo.y;
+      const h = imageInfo.h;
+      const w = imageInfo.w;
 
-      var cw = 5 * (1 / supportImageExt._private.cy.zoom());
-      var ch = 5 * (1 / supportImageExt._private.cy.zoom());
-      if (cw < 5) {
-        cw = 5;
-      }
-      if (ch < 5) {
-        ch = 5;
-      }
+      let cw = 5 * (1 / supportImageExt._private.cy.zoom());
+      let ch = 5 * (1 / supportImageExt._private.cy.zoom());
+      if (cw < 5) cw = 5;
+      if (ch < 5) ch = 5;
 
-      var limits = {
+      let limits = {
         bottomRight: {},
         bottomMiddle: {},
         bottomLeft: {},
@@ -1610,9 +1597,9 @@
     };
 
     SupportImageExtension.prototype.moveImageUp = function (img) {
-      var imgs = this.images();
-      for (var i = 1; i < imgs.length; i++) {
-        var curr = imgs[i];
+      const imgs = this.images();
+      for (let i = 1; i < imgs.length; i++) {
+        const curr = imgs[i];
         if (curr.id === img.id) {
           imgs[i] = imgs[i - 1];
           imgs[i - 1] = curr;
@@ -1623,9 +1610,9 @@
     };
 
     SupportImageExtension.prototype.moveImageDown = function (img) {
-      var imgs = this.images();
-      for (var i = 0; i < imgs.length - 1; i++) {
-        var curr = imgs[i];
+      const imgs = this.images();
+      for (let i = 0; i < imgs.length - 1; i++) {
+        const curr = imgs[i];
         if (curr.id === img.id) {
           imgs[i] = imgs[i + 1];
           imgs[i + 1] = curr;
@@ -1636,11 +1623,10 @@
     };
 
     SupportImageExtension.prototype.selectedImage = function () {
-      var imgs = this.images();
+      const imgs = this.images();
 
-      var idx, len;
-      for (idx = 0, len = imgs.length; idx < len; ++idx) {
-        var image = imgs[idx];
+      for (let idx = 0, len = imgs.length; idx < len; ++idx) {
+        const image = imgs[idx];
         if (image.selected()) return image;
       }
       return null;
@@ -1672,13 +1658,12 @@
     };
 
     SupportImageExtension.prototype.clearSelection = function () {
-      var imgs = this.images();
-      var cy = this._private.cy;
+      const imgs = this.images();
+      const cy = this._private.cy;
 
-      var idx, len;
-      for (idx = 0, len = imgs.length; idx < len; ++idx) {
-        var img = imgs[idx];
-        var selected = img.selected();
+      for (let idx = 0, len = imgs.length; idx < len; ++idx) {
+        const img = imgs[idx];
+        const selected = img.selected();
         img.selected(false);
         img.dragging(false);
         if (selected) {
