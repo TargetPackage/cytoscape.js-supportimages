@@ -10,8 +10,7 @@
     />
 
     <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-    <!--<script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.js"></script>-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.16.1/cytoscape.js"></script>
+    <script src="https://raw.githubusercontent.com/cytoscape/cytoscape.js/unstable/dist/cytoscape.min.js"></script>
 
     <!-- for testing with local version of cytoscape.js -->
     <!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
@@ -52,52 +51,52 @@
 
     <script>
       function removeImg(id) {
-        var si = cy.supportimages();
-        var img = si.image(id);
+        const si = cy.supportimages();
+        const img = si.image(id);
         si.removeSupportImage(img);
         refreshImages();
       }
 
       function moveUp(id) {
-        var si = cy.supportimages();
-        var img = si.image(id);
+        const si = cy.supportimages();
+        const img = si.image(id);
         si.moveImageUp(img);
         refreshImages();
       }
 
       function moveDown(id) {
-        var si = cy.supportimages();
-        var img = si.image(id);
+        const si = cy.supportimages();
+        const img = si.image(id);
         si.moveImageDown(img);
         refreshImages();
       }
 
       function changeLock(id) {
-        var si = cy.supportimages();
-        var img = si.image(id);
+        const si = cy.supportimages();
+        const img = si.image(id);
         si.setImageLocked(img, !img.locked);
         refreshImages();
       }
 
       function changeVisibility(id) {
-        var si = cy.supportimages();
-        var img = si.image(id);
+        const si = cy.supportimages();
+        const img = si.image(id);
         si.setImageVisible(img, !img.visible);
         refreshImages();
       }
 
       function select(id) {
-        var si = cy.supportimages();
-        var img = si.image(id);
+        const si = cy.supportimages();
+        const img = si.image(id);
         si.selectImage(img);
       }
 
       function refreshImages() {
-        var si = cy.supportimages();
-        var imgs = si.images();
-        var html = "<ul>";
-        for (var i = 0; i < imgs.length; i++) {
-          var img = imgs[i];
+        const si = cy.supportimages();
+        const imgs = si.images();
+        let html = "<ul>";
+        for (let i = 0; i < imgs.length; i++) {
+          const img = imgs[i];
           html += "<li>";
           html += img.name;
           html += "(" + img.url + ")";
@@ -133,10 +132,10 @@
       }
 
       function addImage() {
-        var name = $("#name").val();
-        var url = $("#url").val();
+        const name = $("#name").val();
+        const url = $("#url").val();
         if (url && name) {
-          var si = cy.supportimages();
+          const si = cy.supportimages();
           si.addSupportImage({
             name: name,
             url: url,
@@ -150,11 +149,9 @@
 
     <script>
       $(function () {
-        var cy = (window.cy = cytoscape({
+        const cy = (window.cy = cytoscape({
           container: document.getElementById("cy"),
-
           ready: function () {},
-
           style: [
             {
               selector: "node",
@@ -170,7 +167,6 @@
               },
             },
           ],
-
           elements: {
             nodes: [
               { data: { id: "j", name: "Jerry" } },
@@ -195,7 +191,7 @@
         // init the plugin
         cy.supportimages();
         cy.on("cysupportimages.*", function (evt) {
-          var html = $("#events").html();
+          let html = $("#events").html();
           html = "<p>" + evt.type + evt.namespace + "</p>" + html;
           $("#events").html(html);
         });

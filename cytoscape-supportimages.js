@@ -236,18 +236,18 @@
     function isObject(value) {
       // Avoid a V8 JIT bug in Chrome 19-20.
       // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
-      var type = typeof value;
+      const type = typeof value;
       return !!value && (type === "object" || type === "function");
     }
 
     return debounce;
   })();
 
-  var extend = function () {
+  const extend = function () {
     // Variables
-    var deep = false;
-    var i = 0;
-    var length = arguments.length;
+    let deep = false;
+    let i = 0;
+    const length = arguments.length;
 
     // Check if a deep merge
     if (Object.prototype.toString.call(arguments[0]) === "[object Boolean]") {
@@ -255,12 +255,12 @@
       i++;
     }
 
-    var extended = arguments[i] || {};
+    let extended = arguments[i] || {};
     i++;
 
     // Merge the object into the extended object
-    var merge = function (obj) {
-      for (var prop in obj) {
+    const merge = function (obj) {
+      for (const prop in obj) {
         if (Object.prototype.hasOwnProperty.call(obj, prop)) {
           // If deep merge and property is an object, merge properties
           if (
@@ -277,7 +277,7 @@
 
     // Loop through each object and conduct a merge
     for (; i < length; i++) {
-      var obj = arguments[i];
+      const obj = arguments[i];
       merge(obj);
     }
 
@@ -339,6 +339,7 @@
       // called object.constructor();
       return new SupportImage(core, this.json());
     }
+
     function guid() {
       return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
         /[xy]/g,
@@ -395,19 +396,19 @@
   };
 
   SupportImage.prototype.renderedPosition = function () {
-    var core = this._private.core;
-    var r = core.renderer();
+    const core = this._private.core;
+    const r = core.renderer();
 
-    var x = this.bounds.x;
-    var y = this.bounds.y;
+    const zoom = r.data.cy.zoom();
+    const pan = r.data.cy.pan();
 
-    var zoom = r.data.cy.zoom();
-    var pan = r.data.cy.pan();
+    let x = this.bounds.x;
+    let y = this.bounds.y;
     x = x * zoom + pan.x;
     y = y * zoom + pan.y;
 
-    var w = this.bounds.width * zoom;
-    var h = this.bounds.height * zoom;
+    const w = this.bounds.width * zoom;
+    const h = this.bounds.height * zoom;
 
     return {
       x: x + w / 2,
@@ -461,13 +462,13 @@
     this.data.canvasContainer = document.createElement("div");
     this.data.canvasContainer.id = "support-image-extension-div";
 
-    var containerStyle = this.data.canvasContainer.style;
+    let containerStyle = this.data.canvasContainer.style;
     containerStyle.position = "absolute";
     containerStyle.zIndex = "0";
     containerStyle.overflow = "hidden";
 
     // insert as first element in the container
-    var container = this.data.container;
+    const container = this.data.container;
     container.insertBefore(this.data.canvasContainer, container.childNodes[0]);
 
     this.data.canvas = document.createElement("canvas");
@@ -482,7 +483,6 @@
 
   // RENDERER
   SupportImageCanvasRenderer.prototype.notify = function (params) {
-    //console.log(params);
     switch (params.type) {
       case "destroy":
         this.destroy();
@@ -500,9 +500,9 @@
   SupportImageCanvasRenderer.prototype.destroy = function () {
     this.destroyed = true;
 
-    for (var i = 0; i < this.bindings.length; i++) {
-      var binding = this.bindings[i];
-      var b = binding;
+    for (let i = 0; i < this.bindings.length; i++) {
+      const binding = this.bindings[i];
+      const b = binding;
 
       b.target.removeEventListener(b.event, b.handler, b.useCapture);
     }
@@ -548,9 +548,9 @@
   };
 
   SupportImageCanvasRenderer.prototype.findContainerClientCoords = function () {
-    var container = this.data.container;
+    const container = this.data.container;
 
-    var bb = (this.containerBB =
+    const bb = (this.containerBB =
       this.containerBB || container.getBoundingClientRect());
 
     return [bb.left, bb.top, bb.right - bb.left, bb.bottom - bb.top];
@@ -561,12 +561,12 @@
       this.containerBB = null;
     };
 
-  var isFirefox = typeof InstallTrigger !== "undefined";
+  const isFirefox = typeof InstallTrigger !== "undefined";
 
   SupportImageCanvasRenderer.prototype.getPixelRatio = function () {
-    var context = this.data.context;
+    const context = this.data.context;
 
-    var backingStore =
+    const backingStore =
       context.backingStorePixelRatio ||
       context.webkitBackingStorePixelRatio ||
       context.mozBackingStorePixelRatio ||
@@ -624,11 +624,11 @@
     supportImage,
     onLoad
   ) {
-    var r = this;
+    const r = this;
 
-    var imageCache = (r.imageCache = r.imageCache || {});
-    var url = supportImage.url;
-    var id = supportImage.id;
+    const imageCache = (r.imageCache = r.imageCache || {});
+    const url = supportImage.url;
+    const id = supportImage.id;
 
     if (imageCache[url] && imageCache[url].image) {
       return imageCache[url].image;
@@ -636,12 +636,12 @@
       return imageCache[id].video;
     }
 
-    var video_exts = ["mp4", "webm", "ogg"];
-    var isVideo = video_exts.indexOf(url.slice(-3)) > -1 ? true : false;
+    const video_exts = ["mp4", "webm", "ogg"];
+    const isVideo = video_exts.indexOf(url.slice(-3)) > -1 ? true : false;
 
     if (isVideo) {
-      var cache = (imageCache[id] = imageCache[id] || {});
-      var video = (cache.video = document.createElement("video"));
+      const cache = (imageCache[id] = imageCache[id] || {});
+      const video = (cache.video = document.createElement("video"));
       video.addEventListener("loadedmetadata", onLoad);
       video.src = url;
       video.autoplay = true;
@@ -649,8 +649,8 @@
       video.muted = true;
       return video;
     } else {
-      var cache = (imageCache[url] = imageCache[url] || {});
-      var image = (cache.image = new Image());
+      const cache = (imageCache[url] = imageCache[url] || {});
+      const image = (cache.image = new Image());
       image.addEventListener("load", onLoad);
       image.src = url;
       return image;
@@ -660,20 +660,20 @@
   SupportImageCanvasRenderer.prototype.redraw = function (options) {
     options = options || {};
 
-    var forcedZoom = options.forcedZoom;
-    var forcedPan = options.forcedPan;
-    var r = this;
-    var pixelRatio =
+    const forcedZoom = options.forcedZoom;
+    const forcedPan = options.forcedPan;
+    const r = this;
+    const pixelRatio =
       options.forcedPxRatio === undefined
         ? this.getPixelRatio()
         : options.forcedPxRatio;
-    var cy = r.data.cy;
-    var supportImageExt = r.data.supportImageExt;
+    const cy = r.data.cy;
+    const supportImageExt = r.data.supportImageExt;
 
-    var zoom = cy.zoom();
-    var effectiveZoom = forcedZoom !== undefined ? forcedZoom : zoom;
-    var pan = cy.pan();
-    var effectivePan = {
+    const zoom = cy.zoom();
+    const effectiveZoom = forcedZoom !== undefined ? forcedZoom : zoom;
+    const pan = cy.pan();
+    const effectivePan = {
       x: pan.x,
       y: pan.y,
     };
@@ -706,29 +706,26 @@
       }
     }
 
-    var supportImages = supportImageExt.images() || [];
+    const supportImages = supportImageExt.images() || [];
 
-    var context = this.data.context;
+    const context = this.data.context;
     setContextTransform(context);
 
-    for (var idx = supportImages.length - 1; idx >= 0; --idx) {
-      var image = supportImages[idx];
+    for (let idx = supportImages.length - 1; idx >= 0; --idx) {
+      const image = supportImages[idx];
       if (image.visible) {
         this.drawSupportImage(context, image);
       }
     }
   };
 
-  SupportImageCanvasRenderer.prototype.drawResizeControls = function (
-    context,
-    supportImage
-  ) {
-    var supportImageExt = this.data.supportImageExt;
+  SupportImageCanvasRenderer.prototype.drawResizeControls = function (context) {
+    const supportImageExt = this.data.supportImageExt;
 
     context.beginPath();
-    var resizeControls = supportImageExt.resizeControls();
-    for (var i = 0; i < resizeControls.length; i++) {
-      var control = resizeControls[i];
+    const resizeControls = supportImageExt.resizeControls();
+    for (let i = 0; i < resizeControls.length; i++) {
+      const control = resizeControls[i];
       context.rect(control.x, control.y, control.width, control.height);
     }
 
@@ -741,13 +738,13 @@
     context,
     supportImage
   ) {
-    var r = this;
+    const r = this;
 
     // get image, and if not loaded then ask to redraw when later loaded
-    var img = this.getCachedImage(supportImage, function (evt) {
-      var resource = evt.currentTarget;
-      var w = resource.width;
-      var h = resource.height;
+    const img = this.getCachedImage(supportImage, function (evt) {
+      const resource = evt.currentTarget;
+      const w = resource.width;
+      const h = resource.height;
       supportImage.resourceW = w;
       supportImage.resourceH = h;
       supportImage.bounds.width = supportImage.bounds.width || w;
@@ -775,7 +772,7 @@
               supportImage.bounds.height
             );
             context.stroke();
-            r.drawResizeControls(context, supportImage);
+            r.drawResizeControls(context);
           } else {
             context.drawImage(
               img,
@@ -801,10 +798,10 @@
       if (!supportImage.bounds.height) {
         supportImage.bounds.height = img.height;
       }
-      var x = supportImage.bounds.x;
-      var y = supportImage.bounds.y;
-      var w = supportImage.bounds.width;
-      var h = supportImage.bounds.height;
+      const x = supportImage.bounds.x;
+      const y = supportImage.bounds.y;
+      const w = supportImage.bounds.width;
+      const h = supportImage.bounds.height;
       context.drawImage(img, 0, 0, img.width, img.height, x, y, w, h);
 
       if (supportImage.selected()) {
@@ -812,7 +809,7 @@
         context.rect(x, y, w, h);
         context.stroke();
 
-        this.drawResizeControls(context, supportImage);
+        this.drawResizeControls(context);
       }
     }
   };
@@ -821,7 +818,7 @@
   var SupportImageExtension = (function () {
     // helper function
     function bindEvent(supportImageExt, eventName, handler) {
-      var cy = supportImageExt._private.cy;
+      const cy = supportImageExt._private.cy;
 
       cy.on(eventName, function (evt) {
         if (evt.isPropagationStopped && evt.isPropagationStopped()) return;
@@ -833,12 +830,12 @@
           return handler(evt);
         }
 
-        var supportImages = supportImageExt.images();
-        var resizeControls = supportImageExt.resizeControls();
-        var pos = evt.cyPosition ? evt.cyPosition : evt.position;
+        const supportImages = supportImageExt.images();
+        const resizeControls = supportImageExt.resizeControls();
+        const pos = evt.cyPosition ? evt.cyPosition : evt.position;
 
         if (supportImageExt.selectedImage()) {
-          var idx, len;
+          let idx, len;
           for (idx = 0, len = resizeControls.length; idx < len; ++idx) {
             var control = resizeControls[idx];
             if (control.containsPoint(pos.x, pos.y)) {
@@ -847,8 +844,8 @@
           }
         }
 
-        for (idx = 0, len = supportImages.length; idx < len; ++idx) {
-          var image = supportImages[idx];
+        for (let idx = 0, len = supportImages.length; idx < len; ++idx) {
+          const image = supportImages[idx];
           if (image.locked || !image.visible) continue;
           if (image.bounds.containsPoint(pos.x, pos.y)) {
             return handler(evt, image);
@@ -860,15 +857,15 @@
     }
 
     function initRenderer(supportImageExt, options) {
-      var cy = supportImageExt._private.cy;
-      var container = cy.container();
+      const cy = supportImageExt._private.cy;
+      const container = cy.container();
 
       options = extend(
         { name: window && container ? "canvas" : "null" },
         options
       );
 
-      var RendererProto = SupportImageCanvasRenderer;
+      const RendererProto = SupportImageCanvasRenderer;
       if (RendererProto == null) {
         console.error(
           "Can not initialise Support Image Extension: No such renderer `%s` found; did you include its JS file?",
@@ -885,7 +882,7 @@
       );
 
       // auto resize
-      var r = supportImageExt._private.renderer;
+      const r = supportImageExt._private.renderer;
       r.registerBinding(
         window,
         "resize",
@@ -899,8 +896,7 @@
 
     function init(supportImageExt) {
       initRenderer.apply(null, [supportImageExt]);
-
-      var cy = supportImageExt._private.cy;
+      const cy = supportImageExt._private.cy;
 
       cy.on("load initrender", function () {
         supportImageExt.notify({ type: "load" });
@@ -909,7 +905,7 @@
         supportImageExt.notify({ type: "pan" });
       });
       cy.on("zoom", function () {
-        var img = supportImageExt.selectedImage();
+        const img = supportImageExt.selectedImage();
         if (img) {
           updateResizeControls(supportImageExt, img);
         }
@@ -925,10 +921,10 @@
           ? evt.cyRenderedPosition
           : evt.renderedPosition;
       }
-      var evtState = supportImageExt._private.evtState;
+      const evtState = supportImageExt._private.evtState;
 
       function saveCytoscapeState(cy) {
-        var cyState = {
+        const cyState = {
           gabrifyEnabled: cy.autoungrabify(),
           unselectifyEnabled: cy.autounselectify(),
           boxSelectionEnabled: cy.boxSelectionEnabled(),
@@ -942,7 +938,7 @@
       function restoreCytoscapeState(cy) {
         // Always restore if any
         if (evtState.cyState) {
-          var cyState = evtState.cyState;
+          const cyState = evtState.cyState;
           cy.boxSelectionEnabled(cyState.boxSelectionEnabled);
           cy.userPanningEnabled(cyState.userPanningEnabled);
           cy.panningEnabled(cyState.panningEnabled);
@@ -960,16 +956,16 @@
       }
 
       bindEvent(supportImageExt, "mousedown", function (evt, item) {
-        var cy = evt.cy;
+        const cy = evt.cy;
         evtState.mouseDown = true;
         evtState.mousePosition = getMousePosition(evt);
 
-        var isPanEnabled =
+        const isPanEnabled =
           cy.autoungrabify() &&
           cy.panningEnabled() &&
           (!cy.elements().selectable() ||
             cy.elements().selectable() === undefined);
-        var isAreaZoomEnabled =
+        const isAreaZoomEnabled =
           cy.autoungrabify() &&
           !cy.panningEnabled() &&
           (!cy.elements().selectable() ||
@@ -1016,7 +1012,7 @@
       });
 
       bindEvent(supportImageExt, "mouseup", function (evt, item) {
-        var cy = evt.cy;
+        const cy = evt.cy;
         evtState.mouseDown = false;
         evtState.mousePosition = getMousePosition(evt);
         changePointerResizeControl("");
@@ -1026,8 +1022,8 @@
         if (evtState.image) {
           evtState.image.dragging(false);
           if (evtState.imgBounds) {
-            var b1 = evtState.imgBounds;
-            var b2 = evtState.image.bounds;
+            const b1 = evtState.imgBounds;
+            const b2 = evtState.image.bounds;
             if (!b2.equals(b1)) {
               cy.trigger("cysupportimages.imagemoved", [
                 evtState.image,
@@ -1039,9 +1035,9 @@
         }
         if (evtState.resizeControl) {
           if (evtState.imgBounds) {
-            var b1 = evtState.imgBounds;
-            var img = supportImageExt.selectedImage();
-            var b2 = img.bounds;
+            const b1 = evtState.imgBounds;
+            const img = supportImageExt.selectedImage();
+            const b2 = img.bounds;
             if (!b2.equals(b1)) {
               cy.trigger("cysupportimages.imageresized", [img, b1, b2]);
             }
@@ -1055,41 +1051,40 @@
         // Se não for evento de resize é somente mouseover
         if (!evtState.resizeControl) {
           if (item instanceof Rectangle) {
-            //Mouseover
+            // Mouseover
             changePointerResizeControl(item.id);
           } else {
-            //Mouseout
+            // Mouseout
             changePointerResizeControl("");
           }
         }
 
         if (evtState.image && evtState.image.dragging()) {
-          var lastMousePos = evtState.mousePosition;
-          var currMousePos = getMousePosition(evt);
-          var r = evt.supportImageExt._private.renderer;
+          const lastMousePos = evtState.mousePosition;
+          const currMousePos = getMousePosition(evt);
+          const r = evt.supportImageExt._private.renderer;
 
-          var p1 = r.projectIntoViewport(lastMousePos.x, lastMousePos.y);
-          var p2 = r.projectIntoViewport(currMousePos.x, currMousePos.y);
+          const p1 = r.projectIntoViewport(lastMousePos.x, lastMousePos.y);
+          const p2 = r.projectIntoViewport(currMousePos.x, currMousePos.y);
 
           evtState.image.bounds.x += p2[0] - p1[0];
           evtState.image.bounds.y += p2[1] - p1[1];
           updateResizeControls(evt.supportImageExt, evtState.image);
           evt.supportImageExt.notify({ type: "position" });
         } else if (evtState.resizeControl) {
-          var control = evtState.resizeControl;
+          const control = evtState.resizeControl;
+          const lastMousePos = evtState.mousePosition;
+          const currMousePos = getMousePosition(evt);
+          const r = evt.supportImageExt._private.renderer;
 
-          var lastMousePos = evtState.mousePosition;
-          var currMousePos = getMousePosition(evt);
-          var r = evt.supportImageExt._private.renderer;
+          const p1 = r.projectIntoViewport(lastMousePos.x, lastMousePos.y);
+          const p2 = r.projectIntoViewport(currMousePos.x, currMousePos.y);
 
-          var p1 = r.projectIntoViewport(lastMousePos.x, lastMousePos.y);
-          var p2 = r.projectIntoViewport(currMousePos.x, currMousePos.y);
+          const selected = evt.supportImageExt.selectedImage();
+          const bounds = selected.bounds;
 
-          var selected = evt.supportImageExt.selectedImage();
-          var bounds = selected.bounds;
-
-          var keepAspectRatio = evt.originalEvent.ctrlKey;
-          var keepAxis = evt.originalEvent.shiftKey;
+          const keepAspectRatio = evt.originalEvent.ctrlKey;
+          const keepAxis = evt.originalEvent.shiftKey;
 
           if (evtState.imageState.ctrlKey !== keepAspectRatio) {
             evtState.imageState.ctrlKey = keepAspectRatio;
@@ -1107,36 +1102,33 @@
             evtState.imageState.y = bounds.y;
           }
 
-          var factorX = evtState.imageState.width / evtState.imageState.height;
-          var factorY = evtState.imageState.height / evtState.imageState.width;
+          const factorX =
+            evtState.imageState.width / evtState.imageState.height;
+          const factorY =
+            evtState.imageState.height / evtState.imageState.width;
 
-          var dx = p2[0] - p1[0];
-          var dy = p2[1] - p1[1];
+          const dx = p2[0] - p1[0];
+          const dy = p2[1] - p1[1];
 
           // 10 for Width or Height
-          var minimumImageSize = control.width * 2;
+          const minimumImageSize = control.width * 2;
           // size - 1 (from margin)
-          var boundPadding = control.width * 2 - 1;
+          const boundPadding = control.width * 2 - 1;
 
-          var limits = findLimits(
-            //
-            evt.supportImageExt, //
-            {
-              //
-              x: evtState.imageState.x, //
-              y: evtState.imageState.y, //
-              h: evtState.imageState.height, //
-              w: evtState.imageState.width, //
-            }
-          );
+          const limits = findLimits(evt.supportImageExt, {
+            x: evtState.imageState.x,
+            y: evtState.imageState.y,
+            h: evtState.imageState.height,
+            w: evtState.imageState.width,
+          });
 
           switch (control.id) {
             case "tl":
               if (keepAspectRatio) {
-                var d =
+                const d =
                   dx > 0 ? Math.max(dx, dy) : dx < 0 ? Math.min(dx, dy) : dy;
-                var fx = d === dx ? 1 : factorX;
-                var fy = d === dy ? 1 : factorY;
+                const fx = d === dx ? 1 : factorX;
+                const fy = d === dy ? 1 : factorY;
 
                 dx = d * fx;
                 dy = d * fy;
@@ -1145,8 +1137,8 @@
               bounds.width -= keepAxis ? dx * 2 : dx;
               bounds.height -= keepAxis ? dy * 2 : dy;
 
-              var newBoundX = bounds.x + dx;
-              var newBoundY = bounds.y + dy;
+              let newBoundX = bounds.x + dx;
+              let newBoundY = bounds.y + dy;
               if (!keepAxis) {
                 if (newBoundX + boundPadding > limits.bottomRight.x) {
                   newBoundX = limits.bottomRight.x - boundPadding;
@@ -1183,7 +1175,7 @@
                 dy = keepAxis ? dy * 2 : dy;
                 bounds.width -= dy * factorX;
 
-                var newBoundX = bounds.x + dy * factorX * 0.5;
+                let newBoundX = bounds.x + dy * factorX * 0.5;
                 if (
                   bounds.width < minimumImageSize &&
                   bounds.height < minimumImageSize
@@ -1197,10 +1189,10 @@
 
             case "tr":
               if (keepAspectRatio) {
-                var d =
+                const d =
                   dx > 0 ? Math.max(dx, dy) : dx < 0 ? Math.min(dx, dy) : dy;
-                var fx = d === dx ? 1 : -factorX;
-                var fy = d === dy ? 1 : -factorY;
+                const fx = d === dx ? 1 : -factorX;
+                const fy = d === dy ? 1 : -factorY;
 
                 dx = d * fx;
                 dy = d * fy;
@@ -1377,7 +1369,7 @@
     // e como o canvas é único para a imagem e os controles, é preciso aplicar o css para todo o body e realizar o controle manualmente
     // de adição e remoção dos mesmos
     function changePointerResizeControl(control) {
-      var cssCursor = "";
+      let cssCursor = "";
       switch (control) {
         case "tl":
           cssCursor = "nw-resize";
@@ -1408,10 +1400,10 @@
     }
 
     function updateResizeControls(supportImageExt, supportImage) {
-      var x = supportImage.bounds.x;
-      var y = supportImage.bounds.y;
-      var w = supportImage.bounds.width;
-      var h = supportImage.bounds.height;
+      const x = supportImage.bounds.x;
+      const y = supportImage.bounds.y;
+      const w = supportImage.bounds.width;
+      const h = supportImage.bounds.height;
 
       var resizeControls = supportImageExt.resizeControls();
       var cw = 5 * (1 / supportImageExt._private.cy.zoom());
@@ -1489,9 +1481,9 @@
         return new SupportImageExtension(props);
       }
 
-      var RESIZE_CONTROLS = 8;
+      const RESIZE_CONTROLS = 8;
+      const baseControl = { x: 0, y: 0, width: 5, height: 5 };
 
-      var baseControl = { x: 0, y: 0, width: 5, height: 5 };
       this._private = {
         supportImages: [],
         resizeControls: [],
@@ -1499,8 +1491,8 @@
         evtState: {},
       };
 
-      var ids = ["tl", "tm", "tr", "bl", "bm", "br", "ml", "mr"];
-      for (var i = 0; i < RESIZE_CONTROLS; i++) {
+      const ids = ["tl", "tm", "tr", "bl", "bm", "br", "ml", "mr"];
+      for (let i = 0; i < RESIZE_CONTROLS; i++) {
         this.resizeControls().push(
           new Rectangle(extend(baseControl, { id: ids[i] }))
         );
@@ -1515,14 +1507,14 @@
       }
 
       if (json.images) {
-        var imgs = json.images;
-        for (var i = 0; i < imgs.length; i++) {
-          var img = new SupportImage(this, imgs[i]);
+        const imgs = json.images;
+        for (let i = 0; i < imgs.length; i++) {
+          const img = new SupportImage(this, imgs[i]);
           this.images().push(img);
         }
 
         if (json.selected) {
-          var img = this.image(json.selected);
+          const img = this.image(json.selected);
           this.selectImage(img);
         }
       }
@@ -1541,7 +1533,7 @@
     };
 
     SupportImageExtension.prototype.render = function () {
-      var img = this.selectedImage();
+      const img = this.selectedImage();
       if (img) {
         updateResizeControls(this, img);
       }
@@ -1557,24 +1549,22 @@
     };
 
     SupportImageExtension.prototype.image = function (id) {
-      var imgs = this.images();
-
-      var idx, len;
-      for (idx = 0, len = imgs.length; idx < len; ++idx) {
-        var image = imgs[idx];
+      const imgs = this.images();
+      for (let idx = 0, len = imgs.length; idx < len; ++idx) {
+        const image = imgs[idx];
         if (image.id === id) return image;
       }
+
       return null;
     };
 
     SupportImageExtension.prototype.notify = function (params) {
-      var r = this._private.renderer;
-
+      const r = this._private.renderer;
       r.notify(params);
     };
 
     SupportImageExtension.prototype.addSupportImage = function (img, isCenter) {
-      var supImg = new SupportImage(this, img);
+      const supImg = new SupportImage(this, img);
 
       if (isCenter !== false) {
         // middle
@@ -1589,16 +1579,14 @@
       }
 
       this.images().push(supImg);
-
       this._private.renderer.notify({ type: "add", supportImage: supImg });
 
       return supImg;
     };
 
     SupportImageExtension.prototype.removeSupportImage = function (img) {
-      var imgs = this.images();
-
-      var idx = imgs.indexOf(img);
+      let imgs = this.images();
+      const idx = imgs.indexOf(img);
 
       if (idx > -1) {
         imgs.splice(idx, 1);
@@ -1609,7 +1597,6 @@
 
     SupportImageExtension.prototype.setImageLocked = function (img, locked) {
       img.locked = locked;
-
       img.selected(false);
 
       this._private.renderer.notify({ type: "changed", supportImage: img });
@@ -1617,7 +1604,6 @@
 
     SupportImageExtension.prototype.setImageVisible = function (img, visible) {
       img.visible = visible;
-
       img.selected(false);
 
       this._private.renderer.notify({ type: "changed", supportImage: img });
@@ -1663,19 +1649,19 @@
     SupportImageExtension.prototype.selectImage = function (img) {
       if (img.locked || !img.visible || img.selected()) return;
 
-      var imgs = this.images();
-      var cy = this._private.cy;
+      const imgs = this.images();
+      const cy = this._private.cy;
 
-      var idx, len;
-      for (idx = 0, len = imgs.length; idx < len; ++idx) {
-        var image = imgs[idx];
-        var selected = image.selected();
+      for (let idx = 0, len = imgs.length; idx < len; ++idx) {
+        const image = imgs[idx];
+        const selected = image.selected();
         image.selected(false);
         image.dragging(false);
         if (selected) {
           cy.trigger("cysupportimages.imagedeselected", [image]);
         }
       }
+
       img.dragging(false);
       img.selected(true);
       updateResizeControls(this, img);
@@ -1704,14 +1690,14 @@
     };
 
     SupportImageExtension.prototype.json = function () {
-      var imgs = [];
-      var images = this.images();
-      for (var i = 0; i < images.length; i++) {
-        var img = images[i];
+      let imgs = [];
+      const images = this.images();
+      for (let i = 0; i < images.length; i++) {
+        const img = images[i];
         imgs.push(img.json());
       }
-      var selected = this.selectedImage();
-      var selectedId = selected ? selected.id : undefined;
+      const selected = this.selectedImage();
+      const selectedId = selected ? selected.id : undefined;
       return {
         selected: selectedId,
         images: imgs,
@@ -1722,15 +1708,14 @@
   })();
 
   // registers the extension on a cytoscape lib ref
-  var register = function (cytoscape) {
-    if (!cytoscape) {
-      return;
-    } // can't register if cytoscape unspecified
+  const register = function (cytoscape) {
+    // can't register if cytoscape unspecified
+    if (!cytoscape) return;
 
     // if you want a core extension
     cytoscape("core", "supportimages", function (options) {
       // could use options object, but args are up to you
-      var cy = this;
+      const cy = this;
       if (cy._private.supportImageCore) {
         return cy._private.supportImageCore;
       } else {
@@ -1739,8 +1724,6 @@
         cy._private.supportImageCore = new SupportImageExtension(options);
         return cy._private.supportImageCore;
       }
-
-      return this; // chainability
     });
   };
 

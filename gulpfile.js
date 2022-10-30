@@ -35,8 +35,8 @@ gulp.task("version", function (next) {
     done();
   } else {
     exec("git rev-parse HEAD", function (error, stdout, stderr) {
-      var sha = stdout.substring(0, 10); // shorten so not huge filename
-
+      // Shorten so not huge filename
+      const sha = stdout.substring(0, 10);
       version = ["snapshot", sha, +now].join("-");
       done();
     });
@@ -51,7 +51,7 @@ gulp.task("version", function (next) {
 gulp.task("pkgver", ["version"], function () {
   return gulp
     .src(["package.json", "bower.json"])
-    .pipe(replace(/\"version\"\:\s*\".*?\"/, '"version": "' + version + '"'))
+    .pipe(replace(/\"version\"\:\s*\".*?\"/, `"version": "${version}"`))
     .pipe(gulp.dest("./"));
 });
 
