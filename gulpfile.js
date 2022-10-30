@@ -4,7 +4,6 @@ const shell = require("gulp-shell");
 const jshint = require("gulp-jshint");
 const jshStylish = require("jshint-stylish");
 const exec = require("child_process").exec;
-const runSequence = require("run-sequence");
 const prompt = require("gulp-prompt");
 var version;
 
@@ -92,5 +91,5 @@ gulp.task("lint", function () {
 });
 
 gulp.task("publish", function (next) {
-  runSequence("confver", "lint", "pkgver", "push", "tag", "npm", next);
+  gulp.series("confver", "lint", "pkgver", "push", "tag", "npm", next);
 });

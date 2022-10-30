@@ -10,7 +10,6 @@ specifiers:
   gulp-shell: ^0.8.0
   jshint-stylish: ^2.2.1
   prettier: ^2.7.1
-  run-sequence: ^2.2.1
 
 devDependencies:
   eslint: 8.26.0
@@ -22,7 +21,6 @@ devDependencies:
   gulp-shell: 0.8.0
   jshint-stylish: 2.2.1
   prettier: 2.7.1
-  run-sequence: 2.2.1
 
 packages:
   /@eslint/eslintrc/1.3.3:
@@ -3780,18 +3778,6 @@ packages:
       }
     dependencies:
       queue-microtask: 1.2.3
-    dev: true
-
-  /run-sequence/2.2.1:
-    resolution:
-      {
-        integrity: sha512-qkzZnQWMZjcKbh3CNly2srtrkaO/2H/SI5f2eliMCapdRD3UhMrwjfOAZJAnZ2H8Ju4aBzFZkBGXUqFs9V0yxw==,
-      }
-    engines: { node: ">= 0.8.0" }
-    dependencies:
-      chalk: 1.1.3
-      fancy-log: 1.3.3
-      plugin-error: 0.1.2
     dev: true
 
   /rx-lite-aggregates/4.0.8:
