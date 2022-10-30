@@ -24,8 +24,8 @@ Available functionalities:
 
 Download the library:
 
-- via npm: `npm install cytoscape-supportimages`,
-- via bower: `bower install cytoscape-supportimages`, or
+- via npm: `npm install @targetpackage/cytoscape-supportimages`,
+- via bower: `bower install @targetpackage/cytoscape-supportimages`, or
 - via direct download in the repository (probably from a tag).
 
 `require()` the library as appropriate for your project:
@@ -33,8 +33,8 @@ Download the library:
 CommonJS:
 
 ```js
-var cytoscape = require("cytoscape");
-var supportimages = require("cytoscape-supportimages");
+const cytoscape = require("cytoscape");
+const supportimages = require("cytoscape-supportimages");
 
 supportimages(cytoscape); // register extension
 ```
@@ -56,10 +56,10 @@ Plain HTML/JS has the extension registered for you automatically, because no `re
 
 ```js
 // init/get the extension
-var si = cy.supportimages();
+const si = cy.supportimages();
 
 // create rectangle object to set image position, width, and height
-var bounds = si.rectangle({
+const bounds = si.rectangle({
   x: x,
   y: y,
   width: width,
@@ -74,9 +74,9 @@ si.addSupportImage({
 });
 
 // list images
-var imgs = si.images();
+const imgs = si.images();
 
-var myImg = imgs[0];
+const myImg = imgs[0];
 
 // set image locked
 si.setImageLocked(myImg, true);
